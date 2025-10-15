@@ -1,0 +1,37 @@
+:root {
+  --primary: #D97706;
+  --secondary: #F3F4F6;
+  --background: #FFFBEB;
+  --surface: #FFFFFF;
+  --text: #374151;
+  --success: #10B981;
+  --error: #EF4444;
+  --muted: #6B7280;
+  --ring: rgba(217, 119, 6, 0.35);
+  --shadow: 0 10px 25px rgba(0,0,0,0.06);
+  --radius: 14px;
+
+  --gradient-start: #FFFBEB;
+  --gradient-end: #FDE68A;
+}
+
+[data-theme="dark"] {
+  --background: #0f172a;
+  --surface: #111827;
+  --text: #e5e7eb;
+  --secondary: #1f2937;
+  --muted: #9CA3AF;
+  --ring: rgba(251, 191, 36, 0.4);
+  --shadow: 0 10px 25px rgba(0,0,0,0.35);
+}
+
+.bg-gradient-amber {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid rgba(0,0,0,0.04);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
