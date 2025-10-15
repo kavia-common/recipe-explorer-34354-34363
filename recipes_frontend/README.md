@@ -8,6 +8,7 @@ This project provides a minimal React template with a clean, modern UI and minim
 - **Modern UI**: Clean, responsive design with KAVIA brand styling
 - **Fast**: Minimal dependencies for quick loading times
 - **Simple**: Easy to understand and modify
+- **Configurable API**: Switch between local mocks and a real backend via environment variables
 
 ## Getting Started
 
@@ -18,6 +19,8 @@ In the project directory, you can run:
 Runs the app in development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
+By default, the app uses local mocks (no backend required).
+
 ### `npm test`
 
 Launches the test runner in interactive watch mode.
@@ -26,6 +29,74 @@ Launches the test runner in interactive watch mode.
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
+
+## Environment-based API configuration
+
+This app can fetch data from either:
+- Local in-app mocks (default)
+- A real backend API
+
+Control this behavior using environment variables in a `.env` file (create it from `.env.example`):
+
+- `REACT_APP_USE_MOCKS`:
+  - `true` (default): Use local mock data (no network calls).
+  - `false`: Use the real backend.
+- `REACT_APP_API_BASE_URL`:
+  - Base URL of your backend when using real API (e.g., `http://localhost:8080`).
+
+Steps:
+1. Copy the example file:
+   - `cp .env.example .env`
+2. For mocks (default): keep `REACT_APP_USE_MOCKS=true`
+3. For backend:
+   - Set `REACT_APP_USE_MOCKS=false`
+   - Set `REACT_APP_API_BASE_URL=http://localhost:8080` (or your API URL)
+4. Restart `npm start` after changing env vars.
+
+Convenience scripts:
+- `npm run start:mock` — force mocks in dev
+- `npm run build:mock` — build with mocks enabled
+
+## Expected REST API (when REACT_APP_USE_MOCKS=false)
+
+The frontend expects a backend that implements these endpoints:
+
+- GET `${REACT_APP_API_BASE_URL}/api/recipes`
+  - Query params:
+    - `query` (string, optional) — search by title
+    - `cuisine` (string, optional) — exact match
+    - `diet` (string, optional) — exact match
+    - `timeMin` (number, optional) — minimum cooking time (inclusive)
+    - `timeMax` (number, optional) — maximum cooking time (inclusive)
+    - `page` (number, optional, default 1)
+    - `pageSize` (number, optional, default 12)
+  - Response (200):
+    ```
+    {
+      "items": [ { "id": "1", "title": "...", "cuisine": "...", "diet": "...", "time": 25, "rating": 4, "image": "url", "description": "...", "ingredients": [...], "steps": [...] }, ... ],
+      "total": 123
+    }
+    ```
+- GET `${REACT_APP_API_BASE_URL}/api/recipes/{id}`
+  - Path params:
+    - `id` (string)
+  - Response (200):
+    ```
+    {
+      "id": "1",
+      "title": "...",
+      "cuisine": "...",
+      "diet": "...",
+      "time": 25,
+      "rating": 4,
+      "image": "url",
+      "description": "...",
+      "ingredients": ["..."],
+      "steps": ["..."]
+    }
+    ```
+- Error responses:
+  - Non-200 should include status codes (e.g., 404 Not Found). The UI displays a generic error message on failures.
 
 ## Customization
 
